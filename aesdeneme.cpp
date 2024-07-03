@@ -58,8 +58,8 @@ for (int i = 0; i < 4; ++i){
     for(int j = 0; j < 4; ++j){
         subst[i][j] = inversesbox[subst[i][j]];
     }
-    }
-}
+    } 
+ }
 }
 
 void ShiftRows(vector<vector<uint8_t>>& newst) { //vector of vectors provides matrix
@@ -128,3 +128,8 @@ void invMixColumns(vector<uint8_t>& invmix){ //decide char or not
     invmix[3] = GalF(0x0b, temp[0]) ^  GalF(0x0d, temp[1]) ^  GalF(0x09, temp[2]) ^ GalF(0x0e, temp[3]);
 
 }
+
+//For Key Schedule
+static const uint8_t Rcon[11] = { 
+    0x8d, 0x01, 0x02, 0x04, 0x08, 0x10, 0x20, 0x40, 0x80, 0x1b, 0x36
+};
