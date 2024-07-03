@@ -109,6 +109,11 @@ void RotWord(vector<uint8_t>& rotw){
     rotw[3] = temp;
 }
 
+void GalF(uint8_t var1, uint8_t var2 ){ //to be continued
+    uint8_t m[2] = {0x01, 0x1b};
+    
+}
+
 void MixColumns(vector<uint8_t>& mixc){ //decide char or not 
     //get vectors of matrix
     vector<uint8_t> temp = mixc; //define finite field multiplication GalF function
@@ -145,4 +150,4 @@ void AddRoundKey(vector<vector<uint8_t>>& state, vector<vector<uint8_t>>& RoundK
         }
 
     } 
-}
+} 
