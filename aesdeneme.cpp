@@ -25,10 +25,20 @@ void ShiftRows(vector<vector<char>>& newst) { //vector of vectors provides matri
     newst[3][3] = temp[3][2];
 }
 
-void RotWord(vector<char> a){
-    char temp = a[0];
-    a[0] = a[1];
-    a[1] = a[2];
-    a[2] = a[3];
-    a[3] = temp;
+void RotWord(vector<char>& rotw){
+    char temp = rotw[0];
+    rotw[0] = rotw[1];
+    rotw[1] = rotw[2];
+    rotw[2] = rotw[3];
+    rotw[3] = temp;
+}
+
+void MixColumns(vector<char>& mixc){ //decide char or not 
+    //get vectors of matrix
+    vector<char> temp = mixc; //define finite field multiplication GalF function
+    mixc[0] = GalF(2, temp[0]) ^ GalF(3, temp[1]) ^ temp[2] ^ temp[3];
+    mixc[1] = temp[0] ^ GalF(2, temp[1]) ^ GalF(3, temp[2]) ^ temp[3];
+    mixc[2] = temp[0] ^ temp[1] ^ GalF(2, temp[2]) ^ GalF(3, temp[3]);
+    mixc[3] = GalF(3, temp[0]) ^ temp[1] ^ temp[2] ^ GalF(2, temp[3]);
+
 }
