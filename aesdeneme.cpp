@@ -109,9 +109,20 @@ void RotWord(vector<uint8_t>& rotw){
     rotw[3] = temp;
 }
 
-void GalF(uint8_t var1, uint8_t var2 ){ //to be continued
-    uint8_t m[2] = {0x01, 0x1b};
-    
+void GalF(uint8_t var1, uint8_t var2 ){ //CHATGPT Verison
+     uint8_t result = 0;
+    for (int i = 0; i < 8; ++i) {
+        if (var2 & 1) {
+            result ^= var1;
+        }
+        bool hi_bit_set = (var1 & 0x80);
+        var1 <<= 1;
+        if (hi_bit_set) {
+            var1 ^= 0x1b; // XOR with the irreducible polynomial
+        }
+        var2 >>= 1;
+    }
+    return result;
 }
 
 void MixColumns(vector<uint8_t>& mixc){ //decide char or not 
