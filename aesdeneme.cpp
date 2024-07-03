@@ -126,10 +126,23 @@ void invMixColumns(vector<uint8_t>& invmix){ //decide char or not
     invmix[1] =  GalF(0x09, temp[0]) ^ GalF(0x0e, temp[1]) ^ GalF(0x0b, temp[2]) ^  GalF(0x0d, temp[3]);
     invmix[2] =  GalF(0x0d, temp[0]) ^  GalF(0x09, temp[1]) ^ GalF(0x0e, temp[2]) ^ GalF(0x0b, temp[3]);
     invmix[3] = GalF(0x0b, temp[0]) ^  GalF(0x0d, temp[1]) ^  GalF(0x09, temp[2]) ^ GalF(0x0e, temp[3]);
-
 }
 
 //For Key Schedule
-static const uint8_t Rcon[11] = { 
-    0x8d, 0x01, 0x02, 0x04, 0x08, 0x10, 0x20, 0x40, 0x80, 0x1b, 0x36
+static const uint8_t Rcon[10] = { //animation video
+    0x01, 0x02, 0x04, 0x08, 0x10, 0x20, 0x40, 0x80, 0x1b, 0x36
 };
+
+void Cipher(int Nb, int Nr){ //FIPS PDF pseudo code
+
+}  
+
+void AddRoundKey(vector<vector<uint8_t>>& state, vector<vector<uint8_t>>& RoundKey ){ //same function for inverse version
+    vector<vector<uint8_t>> temp = state;
+    for(int i = 0; i < 4; ++i){ 
+        for(int j = 0; j < 4; ++j){
+            state[i][j] = temp[i][j] ^ RoundKey[i][j];
+        }
+
+    } 
+}
