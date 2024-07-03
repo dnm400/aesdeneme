@@ -42,3 +42,13 @@ void MixColumns(vector<char>& mixc){ //decide char or not
     mixc[3] = GalF(3, temp[0]) ^ temp[1] ^ temp[2] ^ GalF(2, temp[3]);
 
 }
+
+void invMixColumns(vector<char>& invmix){ //decide char or not 
+    //get vectors of matrix
+    vector<char> temp = invmix; //define finite field multiplication GalF function
+    invmix[0] = GalF(e, temp[0]) ^ GalF(b, temp[1]) ^  GalF(d, temp[2]) ^  GalF(9, temp[3]); //e, b, d hex definitions
+    invmix[1] =  GalF(9, temp[0]) ^ GalF(e, temp[1]) ^ GalF(b, temp[2]) ^  GalF(d, temp[3]);
+    invmix[2] =  GalF(d, temp[0]) ^  GalF(9, temp[1]) ^ GalF(e, temp[2]) ^ GalF(b, temp[3]);
+    invmix[3] = GalF(b, temp[0]) ^  GalF(d, temp[1]) ^  GalF(9, temp[2]) ^ GalF(e, temp[3]);
+
+}
