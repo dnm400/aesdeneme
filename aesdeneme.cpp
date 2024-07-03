@@ -143,10 +143,9 @@ void Cipher(int Nb, int Nr){ //FIPS PDF pseudo code
 }  
 
 void AddRoundKey(vector<vector<uint8_t>>& state, vector<vector<uint8_t>>& RoundKey ){ //same function for inverse version
-    vector<vector<uint8_t>> temp = state;
     for(int i = 0; i < 4; ++i){ 
         for(int j = 0; j < 4; ++j){
-            state[i][j] = temp[i][j] ^ RoundKey[i][j];
+            state[i][j] ^= RoundKey[i][j];
         }
 
     } 
