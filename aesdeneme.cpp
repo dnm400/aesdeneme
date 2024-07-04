@@ -2,6 +2,7 @@
 #include <iomanip>
 #include <vector>
 #include <string>
+#include <sstream>
 #include <cstdint> // For uint8_t
 
 #define Nr 10 //number of rounds
@@ -184,16 +185,39 @@ void AddRoundKey(vector<vector<uint8_t>>& state, vector<vector<uint8_t>>& RoundK
     } 
 } 
 
+
 int main(){ //define types
 
     vector<vector<uint8_t>> CTRtext(4, vector<uint8_t>(4));
+    vector<vector<uint8_t>> plaintext(4, vector<uint8_t>(4));
     vector<vector<uint8_t>> key(4, vector<uint8_t>(4));
     vector<vector<uint8_t>> ciphertext(4, vector<uint8_t>(4));
 
     cout << "Plain Text? " <<endl;
-    cin >> string plaintext;
+    string plainin;
+    getline(cin, plainin);
+    stringstream ss(plainin);
+    for (int i = 0; i < 4; ++i) {
+        for (int j = 0; j < 4; ++j) {
+            unsigned int temp;
+            ss >> hex >> temp;
+            CTRtext[i][j] = temp;
+        }
+    }
+
     cout << "Key? " << endl;
-    cin >> string key;
+    string keyin;
+    getline(cin, keyin);
+    stringstream ss(keyin); //ChatGPT
+    for (int i = 0; i < 4; ++i) {
+        for (int j = 0; j < 4; ++j) {
+            unsigned int temp;
+            ss >> hex >> temp;
+            CTRtext[i][j] = temp;
+        }
+    }
+
+
     AddRoundKey(CTRtext,key);
     for(int i = 1; i < Nr; ++i){ //Number of rounds Nr
         updateCipher(key, Rcon[i-1]);
@@ -218,7 +242,8 @@ int main(){ //define types
             CTRtext[j][3] = vec3[j];
         }
         AddRoundKey(CTRtext, key);
-        ciphertext = plaintext ^ CTRtext;
+        plaintext ^= CTRtext;
+        CTRtext += 1;
 
     }
     //for last round no mixcolumn 
@@ -229,6 +254,6 @@ int main(){ //define types
 
 
     cout << "Plain Text: " << plaintext << endl;
-    cout << "Key:" << uint8_t key << endl;
+    cout << "Key:" <<  key << endl;
     cout << "Cipher Text: " << ciphertext << endl;
 }
