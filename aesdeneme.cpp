@@ -42,7 +42,7 @@ static const uint8_t inversesbox[256] = {
   0xa0, 0xe0, 0x3b, 0x4d, 0xae, 0x2a, 0xf5, 0xb0, 0xc8, 0xeb, 0xbb, 0x3c, 0x83, 0x53, 0x99, 0x61,
   0x17, 0x2b, 0x04, 0x7e, 0xba, 0x77, 0xd6, 0x26, 0xe1, 0x69, 0x14, 0x63, 0x55, 0x21, 0x0c, 0x7d };
 
-void SubWord(vector<vector<uint8_t>>& subst){ //Assuming vectors length is 4, checking with if
+void SubBytes(vector<vector<uint8_t>>& subst){ //Assuming vectors length is 4, checking with if
 if (subst.size() == 4) {
 for (int i = 0; i < 4; ++i){
     for(int j = 0; j < 4; ++j){
@@ -52,7 +52,7 @@ for (int i = 0; i < 4; ++i){
  }
 }
 
-void invSubWord(vector<vector<uint8_t>>& subst){ //Assuming vectors length is 4, checking with if
+void invSubBytes(vector<vector<uint8_t>>& subst){ //Assuming vectors length is 4, checking with if
 if (subst.size() == 4) {
 for (int i = 0; i < 4; ++i){
     for(int j = 0; j < 4; ++j){
@@ -149,28 +149,17 @@ static const uint8_t Rcon[10] = { //animation video
     0x01, 0x02, 0x04, 0x08, 0x10, 0x20, 0x40, 0x80, 0x1b, 0x36
 };
 
-//just for 1 round, assuming 4x4 cipher is given
-void Cipher(vector<vector<uint8_t>>& keyone){
-    vector<vector<uint8_t>> keyschedule; //define dimension
-    //same for first 4 columns
-    for(int i=0; i < 4; ++i){
-        for(int j=0; j < 4; ++j){
-            keyschedule[i][j] = keyone[i][j];
-            vector<uint8_t> defcolumn[i] = keyone[i][0];
-        } 
+//just for 1 ROUND, assuming 4x4 cipher is given
+void updateCipher(vector<vector<uint8_t>>& keyone, uint8_t Rcont ){
+    vector<vector<uint8_t>> keyschedule = keyone;
+    for(int i = 0; i < 4; ++i){ 
+        vector<uint8_t> veccolumn;
+        veccolumn.push_back(keyschedule[i][3]);
+        keyone[i][0] = keyschedule[i][0] ^ SubBytes(RotWord(veccolumn)) ^ Rcont; //SubBytes gets matrix, should be fixed
+        keyone[i][1] = keyone[i][0] ^ keyschedule[i][1];
+        keyone[i][2] = keyone[i][1] ^ keyschedule[i][2];
+        keyone[i][3] = keyone[i][2] ^ keyschedule[i][3];
     }
-
-    //for multiple of 4, w_4 w_8...w40 for now, 128 bit (WILL BE UPDATED FOR OTHER KEY LENGTHS), 10 rounds
-    for(int n=0; n < 43; ++n){
-        for (int a = 0; a<4 ; ++a){
-        if(n+1 % 4 == 0){
-            vector<uint8_t> defcolumn = keyone[a][n]
-
-        }
-    }
-    }
-
-
 
 }  
 
