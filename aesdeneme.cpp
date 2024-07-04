@@ -4,6 +4,10 @@
 #include <string>
 #include <cstdint> // For uint8_t
 
+#define Nr //number of rounds
+#define Nk //key length
+#define Nb //block size
+
 using namespace std;
 static const uint8_t sbox[256] = {
   //0     1    2      3     4    5     6     7      8    9     A      B    C     D     E     F
@@ -179,3 +183,36 @@ void AddRoundKey(vector<vector<uint8_t>>& state, vector<vector<uint8_t>>& RoundK
 
     } 
 } 
+
+int main(){ //define types
+    cout << "Plain Text? " <<endl;
+    cin >> uint8_t plaintext;
+    cout << "Key? " << endl;
+    cin >> key;
+    AddRoundKey(CTRtext,key);
+    for(int i = 1; i < Nr; ++i){ //Number of rounds Nr
+        updateCipher(key, Rcon[i-1]);
+        SubBytes(CTRtext);
+        ShiftRows(CTRtext);
+        for(int j = 1; j < 4; ++j){
+            for(int k = )
+        }
+        AddRoundKey(CTRtext, key);
+        vector<uint8_t> vec0(4), vec1(4), vec2(4), vec3(4);
+        for(int i = 0; i < 4; ++i){ 
+            vec0[i] = CTRtext[i][0];
+            vec1[i] = CTRtext[i][1];
+            vec2[i] = CTRtext[i][2];
+            vec3[i] = CTRtext[i][3];
+        }
+        
+
+    }
+
+
+
+    uint8_t ciphertext = plaintext ^ CTRtext;
+    cout << "Plain Text: " << plaintext << endl;
+    cout << "Key:" << uint8_t key << endl;
+    cout << "Cipher Text: " << ciphertext << endl;
+}
