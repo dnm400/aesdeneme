@@ -109,8 +109,8 @@ void RotWord(vector<uint8_t>& rotw){
     rotw[3] = temp;
 }
 
-void GalF(uint8_t var1, uint8_t var2 ){ //CHATGPT Verison
-     uint8_t result = 0x00;
+uint8_t GalF(uint8_t var1, uint8_t var2) {
+    uint8_t result = 0x00;
     for (int i = 0; i < 8; ++i) {
         if (var2 & 1) {
             result ^= var1;
@@ -124,6 +124,7 @@ void GalF(uint8_t var1, uint8_t var2 ){ //CHATGPT Verison
     }
     return result;
 }
+
 
 void MixColumns(vector<uint8_t>& mixc){ //decide char or not 
     //get vectors of matrix
