@@ -4,9 +4,9 @@
 #include <string>
 #include <cstdint> // For uint8_t
 
-#define Nr //number of rounds
-#define Nk //key length
-#define Nb //block size
+#define Nr 10 //number of rounds
+#define Nk 4 //key length
+#define Nb 4 //block size
 
 using namespace std;
 static const uint8_t sbox[256] = {
@@ -205,13 +205,27 @@ int main(){ //define types
             vec2[i] = CTRtext[i][2];
             vec3[i] = CTRtext[i][3];
         }
-        
+        MixColumns(vec0);
+        MixColumns(vec1);
+        MixColumns(vec2);
+        MixColumns(vec3);
+
+        for(int i = 0; i < 4; ++i){ 
+            CTRtext[i][0] = vec0[i] ;
+            CTRtext[i][1] = vec1[i];
+            CTRtext[i][2] = vec2[i];
+            CTRtext[i][3] = vec3[i];
+        }
+        ciphertext = plaintext ^ CTRtext;
 
     }
+    //for last round no mixcolumn 
+    SubBytes(CTRtext);
+    ShiftRows(CTRtext);
+    AddRoundKey(CTRtext, key);
+    ciphertext = plaintext ^ CTRtext;
 
 
-
-    uint8_t ciphertext = plaintext ^ CTRtext;
     cout << "Plain Text: " << plaintext << endl;
     cout << "Key:" << uint8_t key << endl;
     cout << "Cipher Text: " << ciphertext << endl;
