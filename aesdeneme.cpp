@@ -109,7 +109,7 @@ void RotWord(vector<uint8_t>& rotw){
     rotw[3] = temp;
 }
 
-uint8_t GalF(uint8_t var1, uint8_t var2) {
+uint8_t GalF(uint8_t var1, uint8_t var2) { //ChatGPT Version
     uint8_t result = 0x00;
     for (int i = 0; i < 8; ++i) {
         if (var2 & 1) {
@@ -151,15 +151,22 @@ static const uint8_t Rcon[10] = { //animation video
 };
 
 //just for 1 ROUND, assuming 4x4 cipher is given
-void updateCipher(vector<vector<uint8_t>>& keyone, uint8_t Rcont ){
-    vector<vector<uint8_t>> keyschedule = keyone;
+void updateCipher(vector<vector<uint8_t>>& updatedkey, uint8_t Rcont ){
+    vector<vector<uint8_t>> keyschedule = updatedkey;
+    vector<uint8_t> veccolumn(4);
     for(int i = 0; i < 4; ++i){ 
-        vector<uint8_t> veccolumn;
-        veccolumn.push_back(keyschedule[i][3]);
-        keyone[i][0] = keyschedule[i][0] ^ SubBytes(RotWord(veccolumn)) ^ Rcont; //SubBytes gets matrix, should be fixed
-        keyone[i][1] = keyone[i][0] ^ keyschedule[i][1];
-        keyone[i][2] = keyone[i][1] ^ keyschedule[i][2];
-        keyone[i][3] = keyone[i][2] ^ keyschedule[i][3];
+        veccolumn[i] = keyschedule[i][3];
+    }
+    RotWord(veccolumn);
+    for(int i = 0; i < 4; ++i){
+        veccolumn[i] = sbox[veccolumn[i]];
+        }
+        veccolumn[0] ^= Rcont;
+    for(int i = 0; i < 4; ++i){   
+        updatedkey[i][0] = keyschedule[i][0] ^ veccolumn[i];
+        updatedkey[i][1] = updatedkey[i][0] ^ keyschedule[i][1];
+        updatedkey[i][2] = updatedkey[i][1] ^ keyschedule[i][2];
+        updatedkey[i][3] = updatedkey[i][2] ^ keyschedule[i][3];
     }
 
 }  
