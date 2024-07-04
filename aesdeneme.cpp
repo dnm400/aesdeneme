@@ -110,7 +110,7 @@ void RotWord(vector<uint8_t>& rotw){
 }
 
 void GalF(uint8_t var1, uint8_t var2 ){ //CHATGPT Verison
-     uint8_t result = 0;
+     uint8_t result = 0x00;
     for (int i = 0; i < 8; ++i) {
         if (var2 & 1) {
             result ^= var1;
@@ -149,7 +149,28 @@ static const uint8_t Rcon[10] = { //animation video
     0x01, 0x02, 0x04, 0x08, 0x10, 0x20, 0x40, 0x80, 0x1b, 0x36
 };
 
-void Cipher(int Nb, int Nr){ //FIPS PDF pseudo code
+//just for 1 round, assuming 4x4 cipher is given
+void Cipher(vector<vector<uint8_t>>& keyone){
+    vector<vector<uint8_t>> keyschedule; //define dimension
+    //same for first 4 columns
+    for(int i=0; i < 4; ++i){
+        for(int j=0; j < 4; ++j){
+            keyschedule[i][j] = keyone[i][j];
+            vector<uint8_t> defcolumn[i] = keyone[i][0];
+        } 
+    }
+
+    //for multiple of 4, w_4 w_8...w40 for now, 128 bit (WILL BE UPDATED FOR OTHER KEY LENGTHS), 10 rounds
+    for(int n=0; n < 43; ++n){
+        for (int a = 0; a<4 ; ++a){
+        if(n+1 % 4 == 0){
+            vector<uint8_t> defcolumn = keyone[a][n]
+
+        }
+    }
+    }
+
+
 
 }  
 
