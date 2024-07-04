@@ -194,28 +194,25 @@ int main(){ //define types
         updateCipher(key, Rcon[i-1]);
         SubBytes(CTRtext);
         ShiftRows(CTRtext);
-        for(int j = 1; j < 4; ++j){
-            for(int k = )
-        }
-        AddRoundKey(CTRtext, key);
         vector<uint8_t> vec0(4), vec1(4), vec2(4), vec3(4);
-        for(int i = 0; i < 4; ++i){ 
-            vec0[i] = CTRtext[i][0];
-            vec1[i] = CTRtext[i][1];
-            vec2[i] = CTRtext[i][2];
-            vec3[i] = CTRtext[i][3];
+        for(int j = 0; j < 4; ++j){ 
+            vec0[j] = CTRtext[j][0];
+            vec1[j] = CTRtext[j][1];
+            vec2[j] = CTRtext[j][2];
+            vec3[j] = CTRtext[j][3];
         }
         MixColumns(vec0);
         MixColumns(vec1);
         MixColumns(vec2);
         MixColumns(vec3);
 
-        for(int i = 0; i < 4; ++i){ 
-            CTRtext[i][0] = vec0[i] ;
-            CTRtext[i][1] = vec1[i];
-            CTRtext[i][2] = vec2[i];
-            CTRtext[i][3] = vec3[i];
+        for(int j = 0; j < 4; ++j){ 
+            CTRtext[j][0] = vec0[j] ;
+            CTRtext[j][1] = vec1[j];
+            CTRtext[j][2] = vec2[j];
+            CTRtext[j][3] = vec3[j];
         }
+        AddRoundKey(CTRtext, key);
         ciphertext = plaintext ^ CTRtext;
 
     }
