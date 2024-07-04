@@ -185,10 +185,15 @@ void AddRoundKey(vector<vector<uint8_t>>& state, vector<vector<uint8_t>>& RoundK
 } 
 
 int main(){ //define types
+
+    vector<vector<uint8_t>> CTRtext(4, vector<uint8_t>(4));
+    vector<vector<uint8_t>> key(4, vector<uint8_t>(4));
+    vector<vector<uint8_t>> ciphertext(4, vector<uint8_t>(4));
+
     cout << "Plain Text? " <<endl;
-    cin >> uint8_t plaintext;
+    cin >> string plaintext;
     cout << "Key? " << endl;
-    cin >> key;
+    cin >> string key;
     AddRoundKey(CTRtext,key);
     for(int i = 1; i < Nr; ++i){ //Number of rounds Nr
         updateCipher(key, Rcon[i-1]);
