@@ -190,57 +190,50 @@ void incrementCTR(vector<vector<uint8_t>>& state){
 }
 
 
+void strtomat(const string &str, vector<vector<uint8_t>> &mat) { 
+    stringstream ss(str); 
+    for (int i = 0; i < 4; ++i) {
+        for (int j = 0; j < 4; ++j) {
+            unsigned int var;
+            ss >> hex >> var;
+            mat[i][j] = static_cast<uint8_t>(var);
+        }
+    }
+}
+
+
 int main(){ //define types
 
     uint8_t IV[12]= {0x00, 0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77, 0x88, 0x99, 0xaa, 0xbb}; // 96-bit IV
     uint8_t counter32[4] = {0x00, 0x00, 0x00, 0x00}; //remaining 32-bit
-    uint8_t CTRtext[sizeof(IV) + sizeof(counter32)];
-    memcpy(CTRtext, IV, sizeof(IV));
-    memcpy(CTRtext + sizeof(IV), counter32, sizeof(counter32));
+    uint8_t CTR[sizeof(IV) + sizeof(counter32)];
+    memcpy(CTR, IV, sizeof(IV));
+    memcpy(CTR + sizeof(IV), counter32, sizeof(counter32));
 
-
+    vector<vector<uint8_t>> CTRmat(4, vector<uint8_t>(4)); //matrix of counter
     vector<vector<uint8_t>> plaintext(4, vector<uint8_t>(4));
     vector<vector<uint8_t>> key(4, vector<uint8_t>(4));
     vector<vector<uint8_t>> ciphertext(4, vector<uint8_t>(4));
 
     cout << "Plain Text? " <<endl;
-    string plainin;
-    getline(cin, plainin);
-    stringstream ss(plainin);
-    for (int i = 0; i < 4; ++i) {
-        for (int j = 0; j < 4; ++j) {
-            unsigned int temp;
-            ss >> hex >> temp;
-            CTRtext[i][j] = temp;
-        }
-    }
-
+    
     cout << "Key? " << endl;
-    string keyin;
-    getline(cin, keyin);
-    stringstream ss(keyin); //ChatGPT
-    for (int i = 0; i < 4; ++i) {
-        for (int j = 0; j < 4; ++j) {
-            unsigned int temp;
-            ss >> hex >> temp;
-            CTRtext[i][j] = temp;
-        }
-    }
-
+   
     cout << "Plain Text: " << plaintext << endl;
     cout << "Key:" <<  key << endl;
     
-    AddRoundKey(CTRtext,key);
+    AddRoundKey(CTRmat,key);
+
     for(int i = 1; i < Nr; ++i){ //Number of rounds Nr
         updateCipher(key, Rcon[i-1]);
-        SubBytes(CTRtext);
-        ShiftRows(CTRtext);
+        SubBytes(CTRmat);
+        ShiftRows(CTRmat);
         vector<uint8_t> vec0(4), vec1(4), vec2(4), vec3(4);
         for(int j = 0; j < 4; ++j){ 
-            vec0[j] = CTRtext[j][0];
-            vec1[j] = CTRtext[j][1];
-            vec2[j] = CTRtext[j][2];
-            vec3[j] = CTRtext[j][3];
+            vec0[j] = CTRmat[j][0];
+            vec1[j] = CTRmat[j][1];
+            vec2[j] = CTRmat[j][2];
+            vec3[j] = CTRmat[j][3];
         }
         MixColumns(vec0);
         MixColumns(vec1);
@@ -248,14 +241,14 @@ int main(){ //define types
         MixColumns(vec3);
 
         for(int j = 0; j < 4; ++j){ 
-            CTRtext[j][0] = vec0[j] ;
-            CTRtext[j][1] = vec1[j];
-            CTRtext[j][2] = vec2[j];
-            CTRtext[j][3] = vec3[j];
+            CTRmat[j][0] = vec0[j] ;
+            CTRmat[j][1] = vec1[j];
+            CTRmat[j][2] = vec2[j];
+            CTRmat[j][3] = vec3[j];
         }
-        AddRoundKey(CTRtext, key);
-        plaintext ^= CTRtext;
-        CTRtext += 1;
+        AddRoundKey(CTRmat, key);
+        plaintext ^= CTRmat;
+        CTRmat += 1;
 
     }
     //for last round no mixcolumn 
