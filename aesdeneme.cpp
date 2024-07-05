@@ -185,12 +185,8 @@ void AddRoundKey(vector<vector<uint8_t>>& state, vector<vector<uint8_t>>& RoundK
     } 
 } 
 
-void incrementCTR(vector<vector<uint8_t>>& state){
-    auto var = ;
-}
 
-
-void strtomat(const string &str, vector<vector<uint8_t>> &mat) { 
+void strtomat(string &str, vector<vector<uint8_t>> &mat) { 
     stringstream ss(str); 
     for (int i = 0; i < 4; ++i) {
         for (int j = 0; j < 4; ++j) {
@@ -201,7 +197,7 @@ void strtomat(const string &str, vector<vector<uint8_t>> &mat) {
     }
 }
 
-string mattostr(const vector<vector<uint8_t>> &mat) {
+string mattostr(vector<vector<uint8_t>> &mat) {
     stringstream ss;
     for (const auto &row : mat) {
         for (const auto &val : row) {
@@ -209,6 +205,14 @@ string mattostr(const vector<vector<uint8_t>> &mat) {
         }
     }
     return ss.str();
+}
+
+void CTRtomat(uint8_t CTR[16], vector<vector<uint8_t>> &CTRmat) {
+    for (int i = 0; i < 4; ++i) {
+        for (int j = 0; j < 4; ++j) {
+            CTRmat[i][j] = CTR[i * 4 + j];
+        }
+    }
 }
 
 void incrementCTR(uint8_t CTR[16]) {
@@ -244,6 +248,7 @@ int main(){ //define types
     AddRoundKey(CTRmat,key);
 
     for(int i = 1; i < Nr; ++i){ //Number of rounds Nr
+        CTRtomat(CTR, CTRmat);
         updateCipher(key, Rcon[i-1]);
         SubBytes(CTRmat);
         ShiftRows(CTRmat);
@@ -267,13 +272,14 @@ int main(){ //define types
         }
         AddRoundKey(CTRmat, key);
         AddRoundKey(plaintext, CTRmat); //XOR plaintext and CTRmatrix
+        incrementCTR(CTR);
         
 
     }
     //for last round no mixcolumn 
-    SubBytes(CTRtext);
-    ShiftRows(CTRtext);
-    AddRoundKey(CTRtext, key);
+    SubBytes(CTRmat);
+    ShiftRows(CTRmat);
+    AddRoundKey(CTRmat, key);
     AddRoundKey(plaintext, CTRmat);
 
     string ciphertext = mattostr(plaintext);
