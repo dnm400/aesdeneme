@@ -256,7 +256,7 @@ int main(){ //define types
             CTRmat[j][3] = vec3[j];
         }
         AddRoundKey(CTRmat, key);
-        plaintext ^= CTRmat;
+        AddRoundKey(plaintext, CTRmat); //XOR plaintext and CTRmatrix
         CTRmat += 1;
 
     }
@@ -264,7 +264,7 @@ int main(){ //define types
     SubBytes(CTRtext);
     ShiftRows(CTRtext);
     AddRoundKey(CTRtext, key);
-    plaintext ^= CTRtext;
+    AddRoundKey(plaintext, CTRmat);
 
 
     cout << "Plain Text: " << plaintext << endl;
