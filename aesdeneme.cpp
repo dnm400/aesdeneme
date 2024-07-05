@@ -185,15 +185,6 @@ void AddRoundKey(vector<vector<uint8_t>>& state, vector<vector<uint8_t>>& RoundK
     } 
 } 
 
-vector<uint8_t> IV = {0x00, 0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77, 0x88, 0x99, 0xaa, 0xbb}; // 96-bit IV
-vector<uint8_t> counter32 = {0x00, 0x00, 0x00, 0x00}; 
-vector<uint8_t> concatenateIVAndCounter() { //should be matrix
-    vector<uint8_t> concatenated;
-    concatenated.insert(concatenated.end(), IV.begin(), IV.end());
-    concatenated.insert(concatenated.end(), counter32.begin(), counter32.end());
-    return concatenated;
-}
-
 void incrementCTR(vector<vector<uint8_t>>& state){
     auto var = ;
 }
@@ -201,7 +192,13 @@ void incrementCTR(vector<vector<uint8_t>>& state){
 
 int main(){ //define types
 
-    vector<vector<uint8_t>> CTRtext(4, vector<uint8_t>(4));
+    uint8_t IV[12]= {0x00, 0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77, 0x88, 0x99, 0xaa, 0xbb}; // 96-bit IV
+    uint8_t counter32[4] = {0x00, 0x00, 0x00, 0x00}; //remaining 32-bit
+    uint8_t CTRtext[sizeof(IV) + sizeof(counter32)];
+    memcpy(CTRtext, IV, sizeof(IV));
+    memcpy(CTRtext + sizeof(IV), counter32, sizeof(counter32));
+
+
     vector<vector<uint8_t>> plaintext(4, vector<uint8_t>(4));
     vector<vector<uint8_t>> key(4, vector<uint8_t>(4));
     vector<vector<uint8_t>> ciphertext(4, vector<uint8_t>(4));
@@ -232,12 +229,6 @@ int main(){ //define types
 
     cout << "Plain Text: " << plaintext << endl;
     cout << "Key:" <<  key << endl;
-
-    vector<uint8_t> IV = {0x00, 0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77, 0x88, 0x99, 0xaa, 0xbb}; //96 bit IV
-    vector<uint8_t> counter32 = {0x00, 0x00, 0x00, 0x00};
-
-
-
     
     AddRoundKey(CTRtext,key);
     for(int i = 1; i < Nr; ++i){ //Number of rounds Nr
