@@ -225,11 +225,15 @@ int main(){ //define types
     vector<vector<uint8_t>> ciphertext(4, vector<uint8_t>(4));
 
     cout << "Plain Text? " <<endl;
-    
+    string plainin;
+    getline(cin, plainin);
+    strtomat(plainin, plaintext);
+
     cout << "Key? " << endl;
+    string keyin;
+    getline(cin, keyin);
+    strtomat(keyin, key);
    
-    cout << "Plain Text: " << plaintext << endl;
-    cout << "Key:" <<  key << endl;
     
     AddRoundKey(CTRmat,key);
 
@@ -266,8 +270,10 @@ int main(){ //define types
     AddRoundKey(CTRtext, key);
     AddRoundKey(plaintext, CTRmat);
 
+    string ciphertext = mattostr(plaintext);
 
-    cout << "Plain Text: " << plaintext << endl;
-    cout << "Key:" <<  key << endl;
-    cout << "Cipher Text: " << plaintext << endl;
+
+    cout << "Plain Text: " << plainin << endl;
+    cout << "Key:" << keyin << endl;
+    cout << "Cipher Text: " << plaintext << ciphertext;
 }
