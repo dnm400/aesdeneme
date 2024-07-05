@@ -244,8 +244,9 @@ int main(){ //define types
     getline(cin, keyin);
     strtomat(keyin, key);
    
-    
+    CTRtomat(CTR, CTRmat);
     AddRoundKey(CTRmat,key);
+    incrementCTR(CTR);
 
     for(int i = 1; i < Nr; ++i){ //Number of rounds Nr
         CTRtomat(CTR, CTRmat);
