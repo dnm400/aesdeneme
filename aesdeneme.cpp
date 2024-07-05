@@ -226,31 +226,31 @@ int main(){ //define types
 
     uint8_t IV[12]= {0x00, 0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77, 0x88, 0x99, 0xaa, 0xbb}; // 96-bit IV
     uint8_t counter32[4] = {0x00, 0x00, 0x00, 0x00}; //remaining 32-bit
-    uint8_t CTR[sizeof(IV) + sizeof(counter32)];
+    uint8_t CTR[sizeof(IV) + sizeof(counter32)]; //16 byte
     memcpy(CTR, IV, sizeof(IV));
     memcpy(CTR + sizeof(IV), counter32, sizeof(counter32));
-
-    vector<vector<uint8_t>> CTRmat(4, vector<uint8_t>(4)); //matrix of counter
-    vector<vector<uint8_t>> plaintext(4, vector<uint8_t>(4));
     vector<vector<uint8_t>> key(4, vector<uint8_t>(4));
 
     cout << "Plain Text? " <<endl;
     string plainin;
     getline(cin, plainin);
-    strtomat(plainin, plaintext);
+    size_t numBlocks = plainin.length() / 32; //blocks for plaintext
+
 
     cout << "Key? " << endl;
     string keyin;
     getline(cin, keyin);
     strtomat(keyin, key);
-   
+ for (size_t m = 0; m < numBlocks; ++m) {
+    string block = plainin.substr(m * 32, 32);
+    vector<vector<uint8_t>> plaintext(4, vector<uint8_t>(4));
+    strtomat(block, plaintext);
+    vector<vector<uint8_t>> CTRmat(4, vector<uint8_t>(4)); //matrix of counter
     CTRtomat(CTR, CTRmat);
     AddRoundKey(CTRmat,key);
-    incrementCTR(CTR);
+
 
     for(int i = 1; i < Nr; ++i){ //Number of rounds Nr
-        CTRtomat(CTR, CTRmat);
-        updateCipher(key, Rcon[i-1]);
         SubBytes(CTRmat);
         ShiftRows(CTRmat);
         vector<uint8_t> vec0(4), vec1(4), vec2(4), vec3(4);
@@ -271,23 +271,28 @@ int main(){ //define types
             CTRmat[j][2] = vec2[j];
             CTRmat[j][3] = vec3[j];
         }
-        AddRoundKey(CTRmat, key);
-        AddRoundKey(plaintext, CTRmat); //XOR plaintext and CTRmatrix
-        incrementCTR(CTR);
-        
 
-    }
+        updateCipher(key, Rcon[i - 1]);
+        AddRoundKey(CTRmat, key);
+    }   
+
+    
     //for last round no mixcolumn 
     SubBytes(CTRmat);
     ShiftRows(CTRmat);
     AddRoundKey(CTRmat, key);
-    AddRoundKey(plaintext, CTRmat);
 
-    string ciphertext = mattostr(plaintext);
+    for (int j = 0; j < 4; ++j) {
+            for (int k = 0; k < 4; ++k) {
+                plaintext[j][k] ^= CTRmat[j][k];
+            }
+        }
+   
+    string ciphertextBlock = mattostr(plaintext);
+    cout << "Ciphertext Block " << m + 1 << ": " << ciphertextBlock << endl;
 
-
-    cout << "Plain Text: " << plainin << endl;
-    cout << "Key:" << keyin << endl;
-    cout << "Cipher Text: " << ciphertext << endl;
+    incrementCTR(CTR);
+    }
     return 0;
+
 }
