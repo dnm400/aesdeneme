@@ -211,6 +211,14 @@ string mattostr(const vector<vector<uint8_t>> &mat) {
     return ss.str();
 }
 
+void CTRtomat(const uint8_t CTR, vector<vector<uint8_t>> &CTRmat) {
+    for (int i = 0; i < 4; ++i) {
+        for (int j = 0; j < 4; ++j) {
+            CTRmat[i][j] = CTR[i * 4 + j];
+        }
+    }
+}
+
 int main(){ //define types
 
     uint8_t IV[12]= {0x00, 0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77, 0x88, 0x99, 0xaa, 0xbb}; // 96-bit IV
@@ -222,7 +230,6 @@ int main(){ //define types
     vector<vector<uint8_t>> CTRmat(4, vector<uint8_t>(4)); //matrix of counter
     vector<vector<uint8_t>> plaintext(4, vector<uint8_t>(4));
     vector<vector<uint8_t>> key(4, vector<uint8_t>(4));
-    vector<vector<uint8_t>> ciphertext(4, vector<uint8_t>(4));
 
     cout << "Plain Text? " <<endl;
     string plainin;
@@ -275,5 +282,6 @@ int main(){ //define types
 
     cout << "Plain Text: " << plainin << endl;
     cout << "Key:" << keyin << endl;
-    cout << "Cipher Text: " << plaintext << ciphertext;
+    cout << "Cipher Text: " << ciphertext << endl;
+    return 0;
 }
