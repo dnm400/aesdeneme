@@ -288,8 +288,8 @@ int main(){ //define types
             }
         }
    
-    string ciphertextBlock = mattostr(plaintext);
-    cout << "Ciphertext Block " << m + 1 << ": " << ciphertextBlock << endl;
+    string ciphertext = mattostr(plaintext);
+    cout << "Ciphertext " << ciphertext ;
 
     incrementCTR(CTR);
     }
