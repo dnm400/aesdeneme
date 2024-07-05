@@ -201,6 +201,15 @@ void strtomat(const string &str, vector<vector<uint8_t>> &mat) {
     }
 }
 
+string mattostr(const vector<vector<uint8_t>> &mat) {
+    stringstream ss;
+    for (const auto &row : mat) {
+        for (const auto &val : row) {
+            ss << hex << setw(2) << setfill('0') << static_cast<int>(val);
+        }
+    }
+    return ss.str();
+}
 
 int main(){ //define types
 
