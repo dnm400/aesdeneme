@@ -211,13 +211,12 @@ string mattostr(const vector<vector<uint8_t>> &mat) {
     return ss.str();
 }
 
-void CTRtomat(const uint8_t CTR, vector<vector<uint8_t>> &CTRmat) {
-    for (int i = 0; i < 4; ++i) {
-        for (int j = 0; j < 4; ++j) {
-            CTRmat[i][j] = CTR[i * 4 + j];
-        }
+void incrementCTR(uint8_t CTR[16]) {
+    for (int i = 15; i >= 0; i--) {
+        if (++CTR[i] != 0) break;
     }
 }
+
 
 int main(){ //define types
 
@@ -268,7 +267,7 @@ int main(){ //define types
         }
         AddRoundKey(CTRmat, key);
         AddRoundKey(plaintext, CTRmat); //XOR plaintext and CTRmatrix
-        CTRmat += 1;
+        
 
     }
     //for last round no mixcolumn 
