@@ -161,7 +161,7 @@ void updateCipher(vector<vector<uint8_t>>& updatedkey, uint8_t Rcont ){
     vector<vector<uint8_t>> keyschedule = updatedkey;
     vector<uint8_t> veccolumn(4);
     for(int i = 0; i < 4; ++i){ 
-        veccolumn[i] = keyschedule[i][3];
+        veccolumn[i] = keyschedule[3][i];
     }
     RotWord(veccolumn);
     for(int i = 0; i < 4; ++i){
@@ -169,10 +169,10 @@ void updateCipher(vector<vector<uint8_t>>& updatedkey, uint8_t Rcont ){
         }
         veccolumn[0] ^= Rcont;
     for(int i = 0; i < 4; ++i){   
-        updatedkey[i][0] = keyschedule[i][0] ^ veccolumn[i];
-        updatedkey[i][1] = updatedkey[i][0] ^ keyschedule[i][1];
-        updatedkey[i][2] = updatedkey[i][1] ^ keyschedule[i][2];
-        updatedkey[i][3] = updatedkey[i][2] ^ keyschedule[i][3];
+        updatedkey[0][i] = keyschedule[0][i] ^ veccolumn[i];
+        updatedkey[1][i] = updatedkey[0][i] ^ keyschedule[1][i];
+        updatedkey[2][i] = updatedkey[1][i] ^ keyschedule[2][i];
+        updatedkey[3][i] = updatedkey[2][i] ^ keyschedule[3][i];
     }
 
 }  
