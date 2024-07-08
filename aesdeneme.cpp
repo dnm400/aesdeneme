@@ -242,7 +242,7 @@ int main(){ //define types
     getline(cin, keyin);
     strtomat(keyin, key);
  for (size_t m = 0; m < numBlocks; ++m) {
-    string block = plainin.substr(m * 32, 32);
+    string block = plainin.substr(m * 32, 32); //CHECK
     vector<vector<uint8_t>> plaintext(4, vector<uint8_t>(4));
     strtomat(block, plaintext);
     vector<vector<uint8_t>> CTRmat(4, vector<uint8_t>(4)); //matrix of counter
