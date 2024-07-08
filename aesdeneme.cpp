@@ -256,10 +256,10 @@ int main(){ //define types
         ShiftRows(CTRmat);
         vector<uint8_t> vec0(4), vec1(4), vec2(4), vec3(4);
         for(int j = 0; j < 4; ++j){ 
-            vec0[j] = CTRmat[j][0];
-            vec1[j] = CTRmat[j][1];
-            vec2[j] = CTRmat[j][2];
-            vec3[j] = CTRmat[j][3];
+            vec0[j] = CTRmat[0][j];
+            vec1[j] = CTRmat[1][j];
+            vec2[j] = CTRmat[2][j];
+            vec3[j] = CTRmat[3][j];
         }
         MixColumns(vec0);
         MixColumns(vec1);
@@ -267,10 +267,10 @@ int main(){ //define types
         MixColumns(vec3);
 
         for(int j = 0; j < 4; ++j){ 
-            CTRmat[j][0] = vec0[j] ;
-            CTRmat[j][1] = vec1[j];
-            CTRmat[j][2] = vec2[j];
-            CTRmat[j][3] = vec3[j];
+            CTRmat[0][j] = vec0[j] ;
+            CTRmat[1][j] = vec1[j];
+            CTRmat[2][j] = vec2[j];
+            CTRmat[3][j] = vec3[j];
         }
 
         updateCipher(key, Rcon[i - 1]);
@@ -278,7 +278,7 @@ int main(){ //define types
     }   
 
     updateCipher(key, Rcon[Nr-1]);
-    
+
     //for last round no mixcolumn 
     SubBytes(CTRmat);
     ShiftRows(CTRmat);
