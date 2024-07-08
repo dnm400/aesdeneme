@@ -187,16 +187,15 @@ void AddRoundKey(vector<vector<uint8_t>>& state, vector<vector<uint8_t>>& RoundK
 } 
 
 
-void strtomat(string &str, vector<vector<uint8_t>> &mat) { 
-    stringstream ss(str); 
-    for (int i = 0; i < 4; ++i) {
-        for (int j = 0; j < 4; ++j) {
-            unsigned int var;
-            ss >> hex >> var;
-            mat[i][j] = static_cast<uint8_t>(var);
-        }
+void strtomat(const string& hexString, vector<vector<uint8_t>>& matrix) {
+
+    // Convert each pair of hex digits to uint8_t and fill the matrix column by column
+    for (int i = 0; i < 16; ++i) {
+        char hexPair[3] = { hexString[2*i], hexString[2*i + 1], '\0' };
+        matrix[i / 4][i % 4] = static_cast<uint8_t>(strtoul(hexPair, nullptr, 16));
     }
 }
+
 
 string mattostr(vector<vector<uint8_t>> &mat) {
     stringstream ss;
