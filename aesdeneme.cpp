@@ -277,6 +277,7 @@ int main(){ //define types
         AddRoundKey(CTRmat, key);
     }   
 
+    updateCipher(key, Rcon[Nr-1]);
     
     //for last round no mixcolumn 
     SubBytes(CTRmat);
