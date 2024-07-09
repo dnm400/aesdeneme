@@ -250,7 +250,6 @@ int main(){ //define types
     getline(cin, keyin);
     keyin.erase(remove_if(keyin.begin(), keyin.end(), [](char c) { return isspace(static_cast<unsigned char>(c)); }), keyin.end());
 
-    strtomat(keyin, key);
 
  for (size_t m = 0; m < numBlocks; ++m) {
     string block = plainin.substr(m * 32, 32); // plaintext shouldnt be written seperate
@@ -258,6 +257,7 @@ int main(){ //define types
     strtomat(block, plaintext);
     vector<vector<uint8_t>> CTRmat(4, vector<uint8_t>(4)); //matrix of counter
     CTRtomat(CTR, CTRmat);
+    strtomat(keyin, key);
     AddRoundKey(CTRmat,key);
 
 
