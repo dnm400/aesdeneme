@@ -4,6 +4,10 @@
 #include <string>
 #include <sstream>
 #include <cstdint> // For uint8_t
+#include <algorithm>
+#include <cstring>
+#include <cctype> // for isspace
+
 
 #define Nr 10 //number of rounds
 #define Nk 4 //key length
@@ -213,7 +217,11 @@ void CTRtomat(uint8_t CTR[16], vector<vector<uint8_t>> &CTRmat) {
 
 void incrementCTR(uint8_t CTR[16]) {
     for (int i = 15; i >= 0; i--) {
-        if (++CTR[i] != 0) break;
+        if (CTR[i] != 0xff){
+            CTR[i] = CTR[i] + 0x01;
+        }
+        else
+        CTR[i-1] = CTR[i-1] + 0x01;
     }
 }
 
@@ -230,15 +238,20 @@ int main(){ //define types
     cout << "Plain Text? " <<endl;
     string plainin;
     getline(cin, plainin);
+    plainin.erase(remove_if(plainin.begin(), plainin.end(), [](char c) { return isspace(static_cast<unsigned char>(c)); }), plainin.end());
+
     size_t numBlocks = plainin.length() / 32; //blocks for plaintext
 
 
     cout << "Key? " << endl;
     string keyin;
     getline(cin, keyin);
+    keyin.erase(remove_if(keyin.begin(), keyin.end(), [](char c) { return isspace(static_cast<unsigned char>(c)); }), keyin.end());
+
     strtomat(keyin, key);
+
  for (size_t m = 0; m < numBlocks; ++m) {
-    string block = plainin.substr(m * 32, 32); //CHECK
+    string block = plainin.substr(m * 32, 32); // plaintext shouldnt be written seperate
     vector<vector<uint8_t>> plaintext(4, vector<uint8_t>(4));
     strtomat(block, plaintext);
     vector<vector<uint8_t>> CTRmat(4, vector<uint8_t>(4)); //matrix of counter
