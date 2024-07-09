@@ -47,26 +47,22 @@ static const uint8_t inversesbox[256] = {
   0xa0, 0xe0, 0x3b, 0x4d, 0xae, 0x2a, 0xf5, 0xb0, 0xc8, 0xeb, 0xbb, 0x3c, 0x83, 0x53, 0x99, 0x61,
   0x17, 0x2b, 0x04, 0x7e, 0xba, 0x77, 0xd6, 0x26, 0xe1, 0x69, 0x14, 0x63, 0x55, 0x21, 0x0c, 0x7d };
 
-void SubBytes(vector<vector<uint8_t>>& subst){ //Assuming vectors length is 4, checking with if
-if (subst.size() == 4) {
+void SubBytes(vector<vector<uint8_t>>& subst){ 
 for (int i = 0; i < 4; ++i){
     for(int j = 0; j < 4; ++j){
         subst[i][j] = sbox[subst[i][j]];
     }
     }
  }
-}
 
-void invSubBytes(vector<vector<uint8_t>>& subst){ //Assuming vectors length is 4, checking with if
-if (subst.size() == 4) {
+
+void invSubBytes(vector<vector<uint8_t>>& subst){ 
 for (int i = 0; i < 4; ++i){
     for(int j = 0; j < 4; ++j){
         subst[i][j] = inversesbox[subst[i][j]];
     }
     } 
  }
-}
-
 void ShiftRows(vector<vector<uint8_t>>& newst) { //vector of vectors provides matrix
     //second row, one left shift
     vector<vector<uint8_t>> temp = newst;
@@ -132,9 +128,9 @@ uint8_t GalF(uint8_t var1, uint8_t var2) { //ChatGPT Version
 }
 
 
-void MixColumns(vector<uint8_t>& mixc){ //decide char or not 
+void MixColumns(vector<uint8_t>& mixc){ 
     //get vectors of matrix
-    vector<uint8_t> temp = mixc; //define finite field multiplication GalF function
+    vector<uint8_t> temp = mixc; 
     mixc[0] = GalF(0x02, temp[0]) ^ GalF(0x03, temp[1]) ^ temp[2] ^ temp[3];
     mixc[1] = temp[0] ^ GalF(0x02, temp[1]) ^ GalF(0x03, temp[2]) ^ temp[3];
     mixc[2] = temp[0] ^ temp[1] ^ GalF(0x02, temp[2]) ^ GalF(0x03, temp[3]);
@@ -142,10 +138,10 @@ void MixColumns(vector<uint8_t>& mixc){ //decide char or not
 
 }
 
-void invMixColumns(vector<uint8_t>& invmix){ //decide char or not 
+void invMixColumns(vector<uint8_t>& invmix){ 
     //get vectors of matrix
-    vector<uint8_t> temp = invmix; //define finite field multiplication GalF function
-    invmix[0] = GalF(0x0e, temp[0]) ^ GalF(0x0b, temp[1]) ^  GalF(0x0d, temp[2]) ^  GalF(0x09, temp[3]); //e, b, d hex definitions
+    vector<uint8_t> temp = invmix; 
+    invmix[0] = GalF(0x0e, temp[0]) ^ GalF(0x0b, temp[1]) ^  GalF(0x0d, temp[2]) ^  GalF(0x09, temp[3]);
     invmix[1] =  GalF(0x09, temp[0]) ^ GalF(0x0e, temp[1]) ^ GalF(0x0b, temp[2]) ^  GalF(0x0d, temp[3]);
     invmix[2] =  GalF(0x0d, temp[0]) ^  GalF(0x09, temp[1]) ^ GalF(0x0e, temp[2]) ^ GalF(0x0b, temp[3]);
     invmix[3] = GalF(0x0b, temp[0]) ^  GalF(0x0d, temp[1]) ^  GalF(0x09, temp[2]) ^ GalF(0x0e, temp[3]);
@@ -189,7 +185,7 @@ void AddRoundKey(vector<vector<uint8_t>>& state, vector<vector<uint8_t>>& RoundK
 
 void strtomat(const string& hexString, vector<vector<uint8_t>>& matrix) {
 
-    // Convert each pair of hex digits to uint8_t and fill the matrix column by column
+    // Convert each pair of hex digits and fill the matrix column by column
     for (int i = 0; i < 16; ++i) {
         char hexPair[3] = { hexString[2*i], hexString[2*i + 1], '\0' };
         matrix[i / 4][i % 4] = static_cast<uint8_t>(strtoul(hexPair, nullptr, 16));
@@ -290,10 +286,11 @@ int main(){ //define types
         }
    
     string ciphertext = mattostr(plaintext);
-    cout << "Ciphertext " << ciphertext ;
+    cout << ciphertext ;
 
     incrementCTR(CTR);
     }
+    cout << " is the ciphertext.";
     return 0;
 
 }
