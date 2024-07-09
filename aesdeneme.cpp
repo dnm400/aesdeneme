@@ -210,18 +210,20 @@ string mattostr(vector<vector<uint8_t>> &mat) {
 void CTRtomat(uint8_t CTR[16], vector<vector<uint8_t>> &CTRmat) {
     for (int i = 0; i < 4; ++i) {
         for (int j = 0; j < 4; ++j) {
-            CTRmat[i][j] = CTR[i * 4 + j];
+            CTRmat[j][i] = CTR[j * 4 + i];
         }
     }
 }
 
 void incrementCTR(uint8_t CTR[16]) {
-    for (int i = 15; i >= 0; i--) {
-        if (CTR[i] != 0xff){
-            CTR[i] = CTR[i] + 0x01;
+    for (int i = 15; i >= 12; --i) { // Only increment the counter part (last 4 bytes)
+        if (CTR[i] != 0xff) {
+            CTR[i] += 1;
+            break;
+        } else {
+            CTR[i] = 0x00; 
+            CTR[i-1] += 1;
         }
-        else
-        CTR[i-1] = CTR[i-1] + 0x01;
     }
 }
 
